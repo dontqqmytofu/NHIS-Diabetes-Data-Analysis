@@ -1,8 +1,19 @@
 import pandas as pd
 import matplotlib.pyplot as mpl
 import numpy as np
+import glob
+import os
 
-fullData = pd.read_csv("C:/Users/syang/Documents/CDC_NHIS_Data/adult20.csv")
+path = r"C:/Users/syang/Documents/CDC_NHIS_Data/splits"
+files = glob.glob(os.path.join(path , "*.csv"))
+li = []
+for filename in files:
+	df = pd.read_csv(filename, index_col = None, header=0)
+	li.append(df)
+
+fullData = pd.concat(li, axis=0, ignore_index=True)
+
+#fullData = pd.read_csv("C:/Users/syang/Documents/CDC_NHIS_Data/adult20.csv")
 replace1 = fullData.replace({'INTV_MON':{1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}, 
 							 'AGEP_A':{85:"85+", 97:'Refused', 98:'Not Ascertained', 99:"Don't Know"},
 							 'SEX_A':{1:'Yes', 2:'No', 7:'Refused', 8:'Not Ascertained', 9:"Don't Know"},
@@ -42,17 +53,17 @@ replace1 = fullData.replace({'INTV_MON':{1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'
 							 'WEIGHTLBTC_A':{1:'Yes', 2:'No', 7:'Refused', 8:'Not Ascertained', 9:"Don't Know"},
 							 'BMICAT_A':{1:'Yes', 2:'No', 7:'Refused', 8:'Not Ascertained', 9:"Don't Know"},
 							 })
-print(replace1)
+#print(replace1)
 
 filteredReplaced = replace1[['HHX', 'INTV_MON', 'AGEP_A', 'SEX_A', 'HISP_A', 'HISPALLP_A', 'HISDETP_A', 'RACEALLP_A', 'PHSTAT_A',
 				  'HYPEV_A', 'HYPDIF_A', 'HYP12M_A', 'HYPMED_A', 'CHLEV_A', 'CHL12M_A', 'CHLMED_A', 'CHDEV_A', 'ANGEV_A', 'MIEV_A', 'STREV_A', 'PREDIB_A', 'GESDIB_A', 'DIBEV_A', 'DIBREL_A', 'PREGNOW_A', 'WEIGHTLBTC_A', 'BMICAT_A', 'DIBTYPE_A',
 				  'ADVACTIVE_A', 'ADVEAT_A', 'ADVWGTPRG_A', 'NOWACTIVE_A', 'NOWEAT_A', 'NOWWGTPRG_A',
 				  'FAMINCTC_A', 'POVRATTC_A', 'INCGRP_A']]
-print(filteredReplaced)
+#print(filteredReplaced)
 #print(sum(1 for x in filteredReplaced['DIBEV_A'] if x=='Yes'))
-print(len(filteredReplaced[filteredReplaced['DIBEV_A'] == 'Yes']))
+#print(len(filteredReplaced[filteredReplaced['DIBEV_A'] == 'Yes']))
 #print(type(filteredReplaced))
-print(len(filteredReplaced[(filteredReplaced['CHLEV_A'] == 'Yes') & (filteredReplaced['DIBEV_A'] == 'Yes')]))
+#print(len(filteredReplaced[(filteredReplaced['CHLEV_A'] == 'Yes') & (filteredReplaced['DIBEV_A'] == 'Yes')]))
 
 #Pie chart of individuals with diabetes
 labels = 'Yes', 'No', "Other - Refused, Not Ascertained, Don't Know"
